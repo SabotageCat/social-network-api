@@ -1,10 +1,10 @@
-const { Thought, User } = require('../models');
+const { Thought } = require('../models');
 
 const thoughtController = {
     // get all thoughts
     getAllThoughts(req, res) {
         Thought.find({})
-        .then(dbThoughtData => res.stats(200).json(dbThoughtData))
+        .then(dbThoughtData => res.status(200).json(dbThoughtData))
         .catch(err => res.status(400).json(err));
     },
     // get a thought by id
@@ -67,7 +67,7 @@ const thoughtController = {
         Thought.findOneAndUpdate(
             { _id: params.thoughtId },
             { $pull: { reactions: { reactionId: params.reactionId } } },
-            { new: true }
+            { new: true, runValidators: true }
         )
         .then(dbThoughtData => {
             if (!dbThoughtData) {
